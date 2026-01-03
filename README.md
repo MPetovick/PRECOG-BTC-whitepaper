@@ -112,17 +112,11 @@ E --> F
 
 PRECOG BTC incorporates three key protection mechanisms:
 
-1. **Fibonacci Weighting:**
-   ```javascript
-   FIB_WEIGHTS: { 0.236: 0.8, 0.382: 1.0, 0.5: 0.9, 0.618: 1.0 }
-   ```
+1. **Fibonacci Weighting**
 
-2. **Confidence Boundaries:**
-   ```javascript
-   Math.min(100, Math.max(0, historicalAccuracy * volatilityImpact))
-   ```
+2. **Confidence Boundaries**
 
-3. **Cross-validation:** Compares predictions across timeframes
+3. **Cross-validation**
 
 ## Real-Time Adaptation Process
 
