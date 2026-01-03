@@ -1,7 +1,5 @@
 # PRECOG BTC - Advanced Bitcoin Prediction System
 
-
-
 **Predict Bitcoin's future with mathematical precision**  
 Combines advanced technical analysis with adaptive AI to generate reliable trading signals
 
@@ -14,59 +12,51 @@ PRECOG BTC is a financial prediction system that uses advanced algorithms and te
 ✅ Generates **consensus signals** through adaptive AI  
 ✅ Provides **actionable recommendations** with precise levels
 
-> "PRECOGs work better in packs. When multiple instances agree, the signal is stronger than any human analysis"
-
-## 💡 The Pack Hack: Boost Your Results
-
-Discover the secret to ultra-reliable signals:
-
-```markdown
-1️⃣ **Open 3+ Tabs** 
-   - Visit https://precog-btc.vercel.app in 3+ browser tabs
-   - Each tab is an independent PRECOG (Agatha, Dash, Arthur...)
-
-2️⃣ **Wait 15 Minutes**
-   - Let each AI adapt to market conditions
-   - Algorithms improve with runtime
-
-3️⃣ **Seek Consensus**
-   - Strong Signal: 80%+ PRECOGs agree → High confidence
-   - Weak Signal: Prediction discrepancy → Wait for confirmation
-```
-
-This method leverages "machine wisdom" - each instance develops complementary biases during execution, creating a collective prediction system more accurate than any individual model.
+> "PRECOGs work better in packs. The system internally runs three independent precogs (Agatha, Arthur, Dash) and combines their predictions for a stronger signal."
 
 ## How the PRECOG System Works
 
 The PRECOG system operates through a multi-layered approach:
 
 1. **Data Collection Layer:**
-   - Real-time market data from APIs
-   - Intelligent caching system
+   - Real-time market data from APIs (CryptoCompare and Binance)
+   - Intelligent caching system (3-minute cache TTL)
    - Continuous price updates (every 3 seconds)
 
 2. **Technical Analysis Engine:**
-```mermaid
-graph TD
-A[Live Price] --> B(RSI Analysis)
-A --> C(MACD Calculation)
-A --> D[Fibonacci Levels]
-A --> E[Ichimoku Cloud]
-B --> F[Prediction Model]
-C --> F
-D --> F
-E --> F
-```
+   - RSI (Relative Strength Index)
+   - MACD (Moving Average Convergence Divergence)
+   - Bollinger Bands
+   - Ichimoku Cloud
+   - Fibonacci Retracement Levels
+   - Golden Momentum (proprietary algorithm)
 
-3. **Adaptive Prediction Core:**
-   - Golden Momentum algorithm
-   - Multi-timeframe consensus
-   - Real-time confidence scoring
+3. **Multi-PRECOG Core:**
+   - **Agatha**: Uses the current selected timeframe (default 1H)
+   - **Arthur**: Configurable timeframe (default 4H) for short-term analysis
+   - **Dash**: Configurable timeframe (default 12H) for medium-term analysis
+   - The system combines the three predictions to generate a final PRECOG signal.
 
 4. **Trading Intelligence:**
    - Position optimization
    - Dynamic stop-loss algorithms
    - Harmonic profit targets
+
+## How to Use
+
+1. **Select Timeframe**: Click on the timeframe buttons (1H, 4H, 6H, 12H, 1D, 1W, 30D) to change the chart and analysis period.
+2. **Configure Precogs**: Click the gear icon (⚙️) to open the precog configuration modal. Here you can change the timeframes used by Arthur and Dash.
+3. **Toggle Indicators**: Click on the indicator icons (MACD, Bollinger Bands, Fibonacci) below the chart to show/hide them.
+4. **Refresh Data**: Click the refresh button to manually update the data.
+
+## Interpreting the Interface
+
+- **Current Price**: The live price of Bitcoin with 24h change.
+- **Prediction Price**: The system's predicted price for the selected timeframe. The color intensity indicates the strength of the expected move (light to dark green for bullish, light to dark red for bearish).
+- **Confidence Level**: The system's confidence in the prediction (0-100%).
+- **PRECOG Price**: The combined prediction from Agatha, Arthur, and Dash.
+- **Technical Indicators Panel**: Shows the current values of key indicators and their trends.
+- **Trading Recommendations**: Provides key support, take profit, stop loss levels, trading strategy, optimal position, risk factor, and backtesting accuracy.
 
 ## Advanced Technology Under the Hood
 
@@ -78,7 +68,6 @@ E --> F
 | **Visualization**   | Chart.js + plugins, CSS Variables           | Interactive responsive charts        |
 | **Adaptation**      | Autoregressive models                       | Continuous market adaptation         |
 
-
 ## Key System Metrics
 
 | Metric               | Optimal        | Risk Zone      | Interpretation                     |
@@ -88,49 +77,3 @@ E --> F
 | **Volatility**       | 15-25%         | >35%           | Risk of sharp movements            |
 | **Historical Acc.**  | >85%           | <70%           | Model effectiveness                |
 | **Fib Levels**       | 8+/12          | <4/12          | Support/resistance proximity       |
-
-## How to Interpret Signals
-
-1. **PRECOG Prediction (Orange):**
-   - Consensus price across timeframes
-   - Primary trading target
-
-2. **Trend (Green/Red Gradient):**
-   - Color intensity = expected move strength
-   - Dark green: Strong bullish momentum
-   - Dark red: Potential crash
-
-3. **Golden Momentum:**
-   - >0% = Bullish momentum (buy dips)
-   - <0% = Bearish momentum (sell rallies)
-
-4. **Fib Levels:**
-   - 8+/12 = Price in reversal zone
-   - <4/12 = Strong trend continuation
-
-## Mathematical Safeguards
-
-PRECOG BTC incorporates three key protection mechanisms:
-
-1. **Fibonacci Weighting**
-
-2. **Confidence Boundaries**
-
-3. **Cross-validation**
-
-## Real-Time Adaptation Process
-
-The system continuously recalibrates:
-```javascript
-setInterval(updateCurrentPrice, 3000);  // 3-second price updates
-setInterval(loadData, 180000);          // 3-minute full analysis
-setInterval(calculatePrecog, 30000);    // 30-second PRECOG updates
-```
-
-## License
-MIT License - Free for analysis and research. Commercial use prohibited without authorization.
-
----
-
-**Disclaimer:**  
-PRECOG BTC is an educational tool. Cryptocurrencies are high-risk assets. Never invest more than you can afford to lose. Past predictions do not guarantee future results.
