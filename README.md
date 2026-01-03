@@ -133,24 +133,6 @@ setInterval(loadData, 180000);          // 3-minute full analysis
 setInterval(calculatePrecog, 30000);    // 30-second PRECOG updates
 ```
 
-## Local Installation (Developers)
-
-1. Clone repository:
-```bash
-git clone https://github.com/yourusername/precog-btc.git
-cd precog-btc
-```
-
-2. Start local server (Python):
-```bash
-python -m http.server  # Python 3.x
-```
-
-3. Access in browser:
-```
-http://localhost:8000
-```
-
 ## License
 MIT License - Free for analysis and research. Commercial use prohibited without authorization.
 
