@@ -1,15 +1,14 @@
 # PRECOG BTC v7.0: Multi-Agent Predictive Analytics System - Technical Manual
 
-## 📋 Executive Overview
 **PRECOG BTC v7.0** is an advanced, multi-source predictive analytics engine for Bitcoin. It synthesizes real-time market data through a system of four specialized, autonomous analytical agents. Each agent employs a distinct, institutional-grade methodology—momentum, pattern recognition, volatility modeling, and risk management. A proprietary consensus engine aggregates and weights their independent predictions to generate a definitive **Consensus Price Target** and **Market Health Assessment**. This system is designed to provide a quantitative, multi-faceted perspective on market direction and risk, moving beyond single-indicator analysis.
 
-## 🔍 System Architecture & Data Flow
+## System Architecture & Data Flow
 1.  **Multi-Source Data Ingestion**: The system polls and validates data from a prioritized cascade of sources: Binance (primary price/volume), CoinGecko (market aggregates), Blockchain.com (on-chain metrics), and Alternative.me (Fear & Greed Index).
 2.  **Agent Processing Pool**: Parallel, independent analysis is performed by the four agents on the ingested historical and real-time data.
 3.  **Consensus Engine**: A weighted algorithm calculates the final price target and signal, excluding the pure-risk agent (Sentinel) from the directional price consensus.
 4.  **Unified Output & UI**: Results, agent-specific insights, and a composite Market Health Score are displayed via a dynamic interface.
 
-## 🤖 Agent Specifications & Methodologies
+## Agent Specifications & Methodologies
 The system's core intelligence is distributed across four specialized agents, each with a defined analytical personality, weighted influence, and core algorithm.
 
 | Agent (Codename) | Analytical Role (Persona) | Core Methodology & Key Metrics | Weight in Consensus | Confidence Drivers & Limitations |
@@ -19,7 +18,7 @@ The system's core intelligence is distributed across four specialized agents, ea
 | **DASH** (Volatility) | Market Regime & Risk Environment Analysis | **Calculates:** Annualized Volatility, Average True Range (ATR), Bollinger Bandwidth, Volatility Clustering. **Model:** Adjusts prediction magnitude based on volatility regime (high/transition/low). | 0.9 | **High Confidence In:** Identifying breakout/breakdown environments from low-volatility compression. **Limited In:** Providing specific directional bias during stable, mean-reverting regimes. |
 | **SENTINEL** (Risk) | Portfolio & Systemic Risk Management | **Calculates:** Value at Risk (VaR), Maximum Drawdown, Sharpe/Sortino Ratios, Liquidity Scores. **Role:** **Does not contribute to price consensus.** Provides risk level (Low/Med/High/Extreme), position-sizing limits, and stop-loss/take-profit recommendations. | N/A | **Triggers:** Elevated VaR (>5%), high historical volatility, extreme Fear/Greed readings, low liquidity. Essential for preserving capital but may limit gains in sustained bullish trends. |
 
-## ⚙️ The Consensus Engine: Mathematical Foundation
+## The Consensus Engine: Mathematical Foundation
 The `ConsensusEngine.calculate()` function generates the primary system output.
 
 **Core Consensus Price Formula:**
@@ -33,13 +32,13 @@ Consensus Price = Σ (Agent_Prediction_i × Agent_Weight_i) / Σ Agent_Weight_i
 *   **Agreement (`agreement`):** The maximum percentage of weighted signals (Bullish/Bearish/Neutral) aligned in one direction.
 *   **Strength (`strength`):** A composite score: `(avgConfidence * agreement) / 100`. Represents the conviction and unity of the signal.
 
-## 🧮 Calculation Deep-Dive: Key Agent Algorithms
+## Calculation Deep-Dive: Key Agent Algorithms
 *   **AGATHA's RSI & Momentum:** Uses an exponential smoothing variant for RSI calculation. Momentum is calculated as the percent change over a lookback period (e.g., `(current - period_ago) / period_ago * 100`).
 *   **ARTHUR's Pattern Detection:** Employs geometric logic to identify local maxima/minima for S/R. Pattern detection uses tolerance bands (e.g., ~0.5%) to identify shoulder/head relationships in Head & Shoulders formations.
 *   **DASH's Volatility Regime:** Classifies market state (`high_volatility`, `low_volatility`, `transition`) by comparing current annualized volatility against static thresholds (e.g., >70% = high, <30% = low) and analyzing recent volatility clusters.
 *   **SENTINEL's Value at Risk (VaR):** Calculates 95% confidence, 1-day historical VaR by sorting period returns and selecting the corresponding percentile loss.
 
-## 🧭 Professional Interpretation Framework
+## Professional Interpretation Framework
 PRECOG outputs are decision-support tools, not autonomous trading signals. Effective use requires contextual interpretation.
 
 ### Interpreting the Consensus Output
@@ -55,7 +54,7 @@ PRECOG outputs are decision-support tools, not autonomous trading signals. Effec
 *   **Sentinel Risk "EXTREME":** An urgent risk-off signal, often coinciding with high VaR and max drawdown. **Action:** Close speculative positions, tighten stops on core holdings, raise cash.
 *   **Using Sentinel's Recommendations:** The suggested `maxPosition` (e.g., 2% of portfolio) and `stopLoss` (e.g., -8%) are **maximum bounds**. Professional practice is to use **tighter** constraints (e.g., half of the suggested position size).
 
-## ⚠️ Critical Disclaimer & System Limits
+## Critical Disclaimer & System Limits
 **This system is a sophisticated analytical tool, not financial advice.** Cryptocurrency markets are extremely volatile. All investments carry risk, including total loss.
 
 **Known System Limitations:**
