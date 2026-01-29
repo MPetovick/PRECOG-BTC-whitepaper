@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRECOG Complete Signal Matrix</title>
+    <style>
+        :root {
+            --bg: #0a0a12;
+            --card: #151522;
+            --border: #2a2a3a;
+            --bullish: #00ff88;
+            --bearish: #ff5555;
+            --neutral: #8a8aa3;
+            --gold: #ffd700;
+            --cyan: #00ffff;
+            --text: #ffffff;
+            --text-dim: #8a8aa3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .matrix-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Ultra Compact Header */
+        .compact-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, var(--cyan), var(--bullish));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .signal-key {
+            display: flex;
+            gap: 10px;
+        }
+
+        .key-item {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 0.85rem;
+        }
+
+        .arrow-bullish { color: var(--bullish); }
+        .arrow-bearish { color: var(--bearish); }
+        .arrow-neutral { color: var(--neutral); }
+
+        /* Complete Signal Matrix Grid - 5x4 */
+        .complete-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 1024px) {
+            .complete-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .complete-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .complete-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .signal-cell {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 85px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .signal-cell:hover {
+            border-color: var(--cyan);
+            transform: translateY(-2px);
+        }
+
+        .cell-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+            min-height: 20px;
+        }
+
+        .cell-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .cell-action {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            white-space: nowrap;
+            margin-left: 4px;
+        }
+
+        .action-buy { background: rgba(0, 255, 136, 0.15); color: var(--bullish); }
+        .action-sell { background: rgba(255, 85, 85, 0.15); color: var(--bearish); }
+        .action-wait { background: rgba(136, 136, 163, 0.15); color: var(--neutral); }
+
+        /* Signal Display */
+        .signal-display {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+            margin-top: auto;
+        }
+
+        .signal-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+        }
+
+        .signal-icon {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .signal-arrow {
+            font-size: 1rem;
+            font-weight: bold;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Premium Cells */
+        .premium {
+            border-color: var(--gold);
+            position: relative;
+        }
+
+        .premium:after {
+            content: "★";
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            color: var(--gold);
+            font-size: 0.7rem;
+            background: var(--bg);
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        /* Risk Cells */
+        .high-risk {
+            border-color: var(--bearish);
+        }
+
+        .high-risk:after {
+            content: "⚠";
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            color: var(--bearish);
+            font-size: 0.7rem;
+            background: var(--bg);
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        /* Quick Rules Bar */
+        .rules-bar {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .rule-item {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            padding: 5px;
+            background: rgba(42, 42, 58, 0.3);
+            border-radius: 4px;
+        }
+
+        .rule-icon {
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+            display: block;
+        }
+
+        /* Footer */
+        .compact-footer {
+            text-align: center;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .order-display {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 5px;
+            flex-wrap: wrap;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-container">
+        <!-- Header -->
+        <header class="compact-header">
+            <div class="logo">PRECOG</div>
+            <div class="signal-key">
+                <div class="key-item">
+                    <span class="arrow-bullish">↑</span>
+                    <span>Bull</span>
+                </div>
+                <div class="key-item">
+                    <span class="arrow-bearish">↓</span>
+                    <span>Bear</span>
+                </div>
+                <div class="key-item">
+                    <span class="arrow-neutral">→</span>
+                    <span>Neutral</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Complete Signal Matrix (20 combinations) -->
+        <div class="complete-grid">
+            <!-- Premium Signals -->
+            <div class="signal-cell premium">
+                <div class="cell-header">
+                    <div class="cell-name">Perfect Storm</div>
+                    <div class="cell-action action-buy">MAX</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                </div>
+            </div>
+
+            <div class="signal-cell">
+                <div class="cell-header">
+                    <div class="cell-name">Triple Threat</div>
+                    <div class="cell-action action-buy">AGGR</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-neutral">→</div></div>
+                </div>
+            </div>
+
+            <div class="signal-cell">
+                <div class="cell-header">
+                    <div class="cell-name">Golden Cross</div>
+                    <div class="cell-action action-buy">BUY</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                </div>
+            </div>
+
+            <div class="signal-cell">
+                <div class="cell-header">
+                    <div class="cell-name">Momentum Burst</div>
+                    <div class="cell-action action-buy">BUY</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-neutral">→</div></div>
+                </div>
+            </div>
+
+            <div class="signal-cell">
+                <div class="cell-header">
+                    <div class="cell-name">Pattern Breakout</div>
+                    <div class="cell-action action-buy">BUY</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-neutral">→</div></div>
+                </div>
+            </div>
+
+            <!-- Conservative Signals -->
+            <div class="signal-cell">
+                <div class="cell-header">
+                    <div class="cell-name">Safe Harbor</div>
+                    <div class="cell-action action-buy">CONS</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                </div>
+            </div>
+
+            <div class="signal-cell">
+                <div class="cell-header">
+                    <div class="cell-name">Risk Approved</div>
+                    <div class="cell-action action-buy">CONS</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                </div>
+            </div>
+
+            <!-- Mixed/Caution Signals -->
+            <div class="signal-cell">
+                <div class="cell-header">
+                    <div class="cell-name">Mixed Signals</div>
+                    <div class="cell-action action-wait">HOLD</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-bearish">↓</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-bearish">↓</div></div>
+                </div>
+            </div>
+
+            <div class="signal-cell">
+                <div class="cell-header">
+                    <div class="cell-name">Divergence</div>
+                    <div class="cell-action action-wait">HOLD</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-bearish">↓</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-neutral">→</div></div>
+                </div>
+            </div>
+
+            <div class="signal-cell">
+                <div class="cell-header">
+                    <div class="cell-name">Volatility Trap</div>
+                    <div class="cell-action action-wait">WAIT</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-bearish">↓</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-neutral">→</div></div>
+                </div>
+            </div>
+
+            <!-- Neutral Signals -->
+            <div class="signal-cell">
+                <div class="cell-header">
+                    <div class="cell-name">Market Neutral</div>
+                    <div class="cell-action action-wait">HOLD</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-neutral">→</div></div>
+                </div>
+            </div>
+
+            <div class="signal-cell">
+                <div class="cell-header">
+                    <div class="cell-name">Low Conviction</div>
+                    <div class="cell-action action-wait">WAIT</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-neutral">→</div></div>
+                </div>
+            </div>
+
+            <!-- Bearish Signals -->
+            <div class="signal-cell high-risk">
+                <div class="cell-header">
+                    <div class="cell-name">Full Bearish</div>
+                    <div class="cell-action action-sell">EXIT</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-bearish">↓</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-bearish">↓</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-bearish">↓</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-bearish">↓</div></div>
+                </div>
+            </div>
+
+            <div class="signal-cell high-risk">
+                <div class="cell-header">
+                    <div class="cell-name">Dead Cross</div>
+                    <div class="cell-action action-sell">SELL</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-bearish">↓</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-bearish">↓</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-bearish">↓</div></div>
+                </div>
+            </div>
+
+            <div class="signal-cell high-risk">
+                <div class="cell-header">
+                    <div class="cell-name">Risk Alert</div>
+                    <div class="cell-action action-sell">REDUCE</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-bearish">↓</div></div>
+                </div>
+            </div>
+
+            <div class="signal-cell">
+                <div class="cell-header">
+                    <div class="cell-name">Volatility Spike</div>
+                    <div class="cell-action action-sell">REDUCE</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-bearish">↓</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-neutral">→</div></div>
+                </div>
+            </div>
+
+            <!-- Additional Signals -->
+            <div class="signal-cell">
+                <div class="cell-header">
+                    <div class="cell-name">Bull Momentum</div>
+                    <div class="cell-action action-buy">BUY</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-neutral">→</div></div>
+                </div>
+            </div>
+
+            <div class="signal-cell">
+                <div class="cell-header">
+                    <div class="cell-name">Pattern Bullish</div>
+                    <div class="cell-action action-buy">BUY</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-neutral">→</div></div>
+                </div>
+            </div>
+
+            <div class="signal-cell">
+                <div class="cell-header">
+                    <div class="cell-name">Low Vol Bull</div>
+                    <div class="cell-action action-buy">BUY</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-neutral">→</div></div>
+                </div>
+            </div>
+
+            <div class="signal-cell">
+                <div class="cell-header">
+                    <div class="cell-name">Cautious Bull</div>
+                    <div class="cell-action action-buy">CONS</div>
+                </div>
+                <div class="signal-display">
+                    <div class="signal-item"><div class="signal-icon">⚡</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">🔍</div><div class="signal-arrow arrow-bullish">↑</div></div>
+                    <div class="signal-item"><div class="signal-icon">📊</div><div class="signal-arrow arrow-neutral">→</div></div>
+                    <div class="signal-item"><div class="signal-icon">🛡️</div><div class="signal-arrow arrow-bearish">↓</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Rules Bar -->
+        <div class="rules-bar">
+            <div class="rule-item">
+                <span class="rule-icon">🛡️↓</span>
+                <div>Stop Trading</div>
+            </div>
+            <div class="rule-item">
+                <span class="rule-icon">⚡🔍↑</span>
+                <div>Max Conviction</div>
+            </div>
+            <div class="rule-item">
+                <span class="rule-icon">📊↓</span>
+                <div>Reduce 50%</div>
+            </div>
+            <div class="rule-item">
+                <span class="rule-icon">→→→→</span>
+                <div>No New Trades</div>
+            </div>
+            <div class="rule-item">
+                <span class="rule-icon">3↑</span>
+                <div>Strong Signal</div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="compact-footer">
+            <div>PRECOG BTC v11 • Complete Signal Matrix • 20 Key Combinations</div>
+            <div class="order-display">
+                <div class="order-item">
+                    <span>Agents:</span>
+                    <span>⚡AGATHA</span>
+                    <span>🔍ARTHUR</span>
+                    <span>📊DASH</span>
+                    <span>🛡️SENTINEL</span>
+                </div>
+                <div class="order-item">
+                    <span>Order:</span>
+                    <span>⚡</span>
+                    <span>🔍</span>
+                    <span>📊</span>
+                    <span>🛡️</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Add hover effects and click feedback
+        document.querySelectorAll('.signal-cell').forEach(cell => {
+            cell.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.02)';
+                this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
+            });
+            
+            cell.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(-2px) scale(1)';
+                this.style.boxShadow = 'none';
+            });
+            
+            cell.addEventListener('click', function() {
+                const action = this.querySelector('.cell-action').textContent;
+                const name = this.querySelector('.cell-name').textContent;
+                
+                this.style.borderColor = 'var(--cyan)';
+                this.style.backgroundColor = 'rgba(0, 212, 255, 0.05)';
+                
+                setTimeout(() => {
+                    this.style.borderColor = '';
+                    this.style.backgroundColor = '';
+                }, 300);
+                
+                console.log(`Signal: ${name} | Action: ${action}`);
+            });
+        });
+
+        // Simple filtering by action type
+        document.querySelectorAll('.key-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const signalType = this.querySelector('span:first-child').textContent;
+                const cells = document.querySelectorAll('.signal-cell');
+                
+                cells.forEach(cell => {
+                    const arrow = cell.querySelector('.signal-arrow');
+                    if (arrow.textContent === signalType) {
+                        cell.style.opacity = '1';
+                        cell.style.transform = 'scale(1.05)';
+                        setTimeout(() => {
+                            cell.style.transform = '';
+                        }, 300);
+                    } else {
+                        cell.style.opacity = '0.5';
+                    }
+                });
+                
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    cells.forEach(cell => {
+                        cell.style.opacity = '1';
+                    });
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
